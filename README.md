@@ -4,7 +4,7 @@ Código para análise de aerofólios do mestrado do Frustrado (T-22).
 
 Para instruções de utilização, veja os exemplos na pasta examples!
 
-As funções principais (Airfoil() e solve()) tem os seguintes protótipos:
+As funções principais (Airfoil() e solve()) têm os seguintes protótipos:
 
 ```
 
