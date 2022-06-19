@@ -4,6 +4,8 @@ module ArkRoyal
 	using ForwardDiff
 
 	using DelimitedFiles
+
+	using Interpolations
 	
 	include("VortexPanels.jl")
 
@@ -15,5 +17,6 @@ module ArkRoyal
 	include("Solve.jl")
 
 	include("NACA.jl")
+	include("Spline.jl")
 
 end # module
