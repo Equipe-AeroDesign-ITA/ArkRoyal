@@ -33,7 +33,7 @@ function BSpline_airfoil(
 
     xint = extrapolate(
         interpolate(pts[:, 1], BSpline(Cubic(Line(OnGrid())))),
-        Flat()
+        Line()
     )
     yint = extrapolate(
         interpolate(pts[:, 2], BSpline(Cubic(Line(OnGrid())))),
@@ -67,7 +67,8 @@ function BSpline_airfoil(
     end
 
     if normalize
-        npts[1, :] .-= minimum(npts[1, :])
+        npts[:, 1] .-= minimum(npts[:, 1])
+        npts[:, 2] .-= npts[argmin(npts[1, :]), 2]
 
         npts ./= (maximum(npts[:, 1]) - minimum(npts[:, 1]))
     end
