@@ -5,15 +5,20 @@ afl = Airfoil("GAW1.dat")
 
 αs = collect(0.0:1.0:15.0)
 
+converged = Bool[]
 polar = vcat(
 	[
 		begin
-			res = solve(afl; α = α, n_iter = 15)
+			res = solve(afl; α = α)
+
+			push!(converged, res.converged)
 
 			[res.CL res.CD res.Cm]
 		end for α in αs
 	]...
 )
+αs = αs[converged]
+polar = polar[converged, :]
 
 writedlm(
 	"GAW1.plr",

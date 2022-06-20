@@ -11,6 +11,7 @@ struct AirfoilSolution
 	CL::Real
 	CD::Real
 	Cm::Real
+	converged::Bool
 end
 
 #=
@@ -62,7 +63,9 @@ function solve(
 	Re::Real = 1e6,
 	M∞::Real = 0.0,
 	Ncr::Real = 9.0,
-	n_iter::Int64 = 10,
+	n_iter::Int64 = 20,
+	tol::Real = 1e-3,
+	ω::Real = 0.5,
 	stall_correction::Symbol = :Eppler,
 	kwargs...
 )
@@ -84,22 +87,37 @@ function solve(
 
 	vs = Matrix{eltype(u)}(undef, 3, length(u))
 
+	converged = true
+	dr = 0.0
+
 	# i1
 	vs[:, i1] .= march(
 		q0, q0, 0.0, u[i1], (afl.sV[i1] - afl.sV[i2]) * η;
 		M∞ = M∞,
 		Re = Re,
 		Ncr = Ncr,
+		ω = ω,
 		kwargs...
 	)
 	for nit = 2:n_iter
+		θo = vs[1, i1]
+
 		vs[:, i1] .= march(
 			q0, vs[:, i1], 0.0, u[i1], (afl.sV[i1] - afl.sV[i2]) * η;
 			M∞ = M∞,
 			Re = Re,
 			Ncr = Ncr,
+			ω = ω,
 			kwargs...
 		)
+
+		if abs(vs[1, i1] - θo) / (θo + 1e-12) < tol
+			break
+		end
+
+		if nit == n_iter
+			converged = false
+		end
 	end
 	
 	for i = (i1-1):-1:1
@@ -108,16 +126,28 @@ function solve(
 			M∞ = M∞,
 			Re = Re,
 			Ncr = Ncr,
+			ω = ω,
 			kwargs...
 		)
 		for nit = 2:n_iter
+			θo = vs[1, i]
+
 			vs[:, i] .= march(
 				vs[:, i + 1], vs[:, i], u[i + 1], u[i], afl.sV[i] - afl.sV[i + 1];
 				M∞ = M∞,
 				Re = Re,
 				Ncr = Ncr,
+				ω = ω,
 				kwargs...
 			)
+
+			if abs(vs[1, i] - θo) / (θo + 1e-12) < tol
+				break
+			end
+
+			if nit == n_iter
+				converged = false
+			end
 		end
 	end
 
@@ -127,16 +157,28 @@ function solve(
 		M∞ = M∞,
 		Re = Re,
 		Ncr = Ncr,
+		ω = ω,
 		kwargs...
 	)
 	for nit = 2:n_iter
+		θo = vs[1, i2]
+
 		vs[:, i2] .= march(
 			q0, vs[:, i2], 0.0, u[i2], (afl.sV[i2] - afl.sV[i1]) * (1.0 - η);
 			M∞ = M∞,
 			Re = Re,
 			Ncr = Ncr,
+			ω = ω,
 			kwargs...
 		)
+
+		if abs(vs[1, i2] - θo) / (θo + 1e-12) < tol
+			break
+		end
+
+		if nit == n_iter
+			converged = false
+		end
 	end
 	
 	for i = (i2+1):length(u)
@@ -145,16 +187,28 @@ function solve(
 			M∞ = M∞,
 			Re = Re,
 			Ncr = Ncr,
+			ω = ω,
 			kwargs...
 		)
 		for nit = 2:n_iter
+			θo = vs[1, i]
+
 			vs[:, i] .= march(
 				vs[:, i - 1], vs[:, i], u[i - 1], u[i], afl.sV[i] - afl.sV[i - 1];
 				M∞ = M∞,
 				Re = Re,
 				Ncr = Ncr,
+				ω = ω,
 				kwargs...
 			)
+
+			if abs(vs[1, i] - θo) / (θo + 1e-12) < tol
+				break
+			end
+
+			if nit == n_iter
+				converged = false
+			end
 		end
 	end
 
@@ -325,7 +379,8 @@ function solve(
 		Cf,
 		CL,
 		CD,
-		Cm
+		Cm,
+		converged
 	)
 
 end

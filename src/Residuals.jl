@@ -13,7 +13,7 @@ function residual(
 	Ncr::Real = 9.0,
 	Re::Real = 1e6,
 	M∞::Real = 0.0,
-	γ::Real = 1.4
+	γ::Real = 1.4,
 )
 
 	θm, Hm, Nm = Qm
@@ -94,6 +94,7 @@ function march(
 	uim1::Real,
 	u::Real,
 	δx::Real;
+	ω::Real = 0.5,
 	kwargs...
 )
 
@@ -120,9 +121,9 @@ function march(
 		kwargs...
 	)
 
-	q = q - J \ r
+	qn = q - J \ r
 
-	θ, H, N = q
+	θ, H, N = qn
 	θm, Hm, Nm = qim1
 
 	if θ < θm
@@ -138,6 +139,10 @@ function march(
 	if N < Nm
 		N = Nm
 	end
+
+	θ = q[1] * (1.0 - ω) + θ * ω
+	H = q[2] * (1.0 - ω) + H * ω
+	N = q[3] * (1.0 - ω) + N * ω
 
 	[θ, H, N]
 
