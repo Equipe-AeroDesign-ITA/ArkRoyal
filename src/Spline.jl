@@ -84,7 +84,7 @@ function BSpline_airfoil(
 
 end
 
-include("Utils.jl")
+include("BezierSpline.jl")
 
 """
 ```
@@ -122,16 +122,7 @@ function Bezier_airfoil(
         )
     )
 
-    xint = [
-        Bez(t, pts[:, 1]) for t in discretization
-    ]
-    yint = [
-        Bez(t, pts[:, 2]) for t in discretization
-    ]
-
-    npts = [
-        xint yint
-    ]
+    npts = Bezier_spline(pts, discretization)
 
     if rotate
         iTE = argmax(npts[:, 1])
