@@ -63,7 +63,7 @@ function solve(
 	Re::Real = 1e6,
 	M∞::Real = 0.0,
 	Ncr::Real = 9.0,
-	n_iter::Int64 = 20,
+	n_iter::Int64 = 30,
 	tol::Real = 1e-3,
 	ω::Real = 0.5,
 	stall_correction::Symbol = :Eppler,
