@@ -63,9 +63,9 @@ function solve(
 	Re::Real = 1e6,
 	M∞::Real = 0.0,
 	Ncr::Real = 9.0,
-	n_iter::Int64 = 30,
-	tol::Real = 1e-3,
-	ω::Real = 0.5,
+	n_iter::Int64 = 50,
+	tol::Real = 0.0,
+	ω::Real = 0.2,
 	stall_correction::Symbol = :Eppler,
 	kwargs...
 )
@@ -380,7 +380,7 @@ function solve(
 		CL,
 		CD,
 		Cm,
-		converged
+		converged || (tol == 0.0)
 	)
 
 end
