@@ -15,8 +15,10 @@
         1.0 0.0;
     ]
 
-    pts = BSpline_airfoil(
-        ipts
+    pts = Bezier_airfoil(
+        ipts;
+        rotate = false,
+        normalize = false,
     )
 
     writedlm("interpolated.dat", pts)
