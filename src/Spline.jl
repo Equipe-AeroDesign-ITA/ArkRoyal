@@ -142,7 +142,7 @@ function Bezier_airfoil(
 
     if normalize
         npts[:, 1] .-= minimum(npts[:, 1])
-        npts[:, 2] .-= npts[argmin(npts[1, :]), 2]
+        npts[:, 2] .-= npts[argmin(npts[:, 1]), 2]
 
         npts ./= (maximum(npts[:, 1]) - minimum(npts[:, 1]))
     end
