@@ -25,6 +25,7 @@ function solve(
 	Re::Real = 1e6,
 	M∞::Real = 0.0,
 	Ncr::Real = 9.0, # as per Drela's e-N envelope method
+	N_bypass::Real = 0.0, # initial value for bypass turbulence
 	n_iter::Int64 = 50,
 	tol::Real = 0.0, # tolerance for pointwise Newton method
 	ω::Real = 0.2, # relaxation factor for pointwise Newton method

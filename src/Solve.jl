@@ -63,6 +63,7 @@ function solve(
 	Re::Real = 1e6,
 	M∞::Real = 0.0,
 	Ncr::Real = 9.0,
+	N_bypass::Real = 0.0,
 	n_iter::Int64 = 50,
 	tol::Real = 0.0,
 	ω::Real = 0.2,
@@ -72,7 +73,7 @@ function solve(
 
 	u = solve_inviscid(afl; α = α)
 
-	q0 = [0.0, 2.5, 0.0]
+	q0 = [0.0, 2.5, N_bypass]
 
 	i1 = i2 = 0
 	η = 0.0
