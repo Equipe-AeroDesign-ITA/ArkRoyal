@@ -276,7 +276,7 @@ function solve(
 	ydet_lower = afl.pts[end, 2]
 
 	for i = 1:i1
-		if N[i] > Ncr
+		if N[i] > 3Ncr
 			if H[i] >= 2.8 && H[i + 1] < 2.8
 				η = (H[i] - 2.8) / (H[i] - H[i + 1])
 
@@ -287,7 +287,7 @@ function solve(
 	end
 
 	for i = length(N):-1:i2
-		if N[i] > Ncr
+		if N[i] > 3Ncr
 			if H[i] >= 2.8 && H[i - 1] < 2.8
 				η = (H[i] - 2.8) / (H[i] - H[i - 1])
 
